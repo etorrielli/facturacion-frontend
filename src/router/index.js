@@ -7,6 +7,7 @@ import Full from '@/containers/Full'
 // Views
 import Dashboard from '@/views/Dashboard'
 import Facturas from '@/views/factura/Facturas'
+import AltaFactura from '@/views/factura/AltaFactura'
 import Clientes from '@/views/cliente/Clientes'
 
 Vue.use(Router)
@@ -39,6 +40,19 @@ export default new Router({
           path: 'facturas',
           name: 'Facturas',
           component: Facturas
+        }
+      ]
+    },
+    {
+      path: '/',
+      redirect: '/dashboard',
+      name: 'AltaFactura',
+      component: Full,
+      children: [
+        {
+          path: 'alta-factura',
+          name: 'Factura',
+          component: AltaFactura
         }
       ]
     },
