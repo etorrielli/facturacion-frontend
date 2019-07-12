@@ -57,29 +57,6 @@
                     </b-form-group>
                   </b-col>
                 </b-row>
-                <!-- <b-row>
-                  <b-col></b-col>
-                  <b-col>
-                    <b-form-group
-                      label-cols="3"
-                      label="Descripción:"
-                      label-align="right"
-                      label-for="descripcion"
-                    >
-                      <b-form-input id="descripcion" v-model="facturaDTO.descripcion"></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                  <b-col>
-                    <b-form-group
-                      label-cols="3"
-                      label="Observación:"
-                      label-align="right"
-                      label-for="observacion"
-                    >
-                      <b-form-input id="observacion" v-model="facturaDTO.observacion"></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row> -->
               </b-form-group>
             </b-card>
           </div>
@@ -87,8 +64,16 @@
       </div>
       <br />
       <div>
-        <!-- Using modifiers -->
-        <b-button v-b-toggle.collapse-2 class="m-1" variant="blue">Agregar Productos</b-button>
+        <b-button
+          v-b-toggle.collapse-2
+          class="m-1"
+          variant="blue"
+          @click="showCollapse = !showCollapse"
+        >
+          Agregar Productos
+          <icon name="angle-right" class="icon-button" v-if="!showCollapse"></icon>
+          <icon name="angle-down" class="icon-button" v-if="showCollapse"></icon>
+        </b-button>
 
         <!-- Element to collapse -->
         <b-collapse id="collapse-2">
@@ -129,8 +114,12 @@
               :fields="fieldsDetalleFactura"
             >
               <template slot="changeCantidad" slot-scope="row">
-                <b-button size="sm" @click="restarProducto(row.item, row.index)" class="mr-2">-</b-button>
-                <b-button size="sm" @click="sumarProducto(row.item, row.index)" class="mr-2">+</b-button>
+                <b-button size="sm" @click="restarProducto(row.item, row.index)" class="mr-2">
+                  <icon name="minus" class="icon-button-alone"></icon>
+                </b-button>
+                <b-button size="sm" @click="sumarProducto(row.item, row.index)" class="mr-2">
+                  <icon name="plus" class="icon-button-alone"></icon>
+                </b-button>
               </template>
               <template slot="actions" slot-scope="row">
                 <b-button
@@ -167,8 +156,9 @@ export default {
 	},
 	data() {
 		return {
+			showCollapse: false,
 			clienteSelected: null,
-			clienteOptions: null,
+			clienteOptions: {},
 			itemsProducto: null,
 			fields: {
 				id: {
@@ -312,20 +302,60 @@ export default {
 			return indiceProd;
 		},
 		saveFactura() {
+			const mensaje = this.validar();
+			if (mensaje === null) {
+				axios
+					.post('http://localhost:8686/facturas', this.facturaDTO)
+					.then(respuesta => {
+						this.makeToast(
+							'success',
+							'Felicitaciones!',
+							'Se ha guardado correctamente',
+							true
+						);
+					})
+					.catch(error => {
+						console.log(error);
+						this.makeToast('danger', 'Ups!', 'Ha ocurrido un error', false);
+					});
+			} else {
+				this.makeToast('warning', 'Ups!', mensaje, false);
+			}
+		},
+		validar() {
+			let mensaje = null;
+			if (this.clienteSelected === null) {
+				mensaje = 'Debe seleccionar un cliente';
+			}
+			else if (
+				this.facturaDTO.detalles === undefined ||
+				this.facturaDTO.detalles === null ||
+				this.facturaDTO.detalles.length === 0
+			) {
+				mensaje = 'Debe seleccionar al menos un producto';
+			}
+			return mensaje;
+		},
+		makeToast(variant = null, titulo, msj, redirect) {
 			const router = this.$router;
-			axios
-				.post('http://localhost:8686/facturas', this.facturaDTO)
-				.then(respuesta => {
-					console.log(respuesta);
-
-					if (respuesta.data.status === 0) {
-						router.push('/facturas');
-					}
-				})
-				.catch(error => {
-					console.log(error);
+			setTimeout(resolve => {
+				this.$bvToast.toast(`${msj}`, {
+					title: `${titulo}`,
+					variant: variant,
+					solid: true
 				});
+			}, 1000);
+			if (redirect) router.push('/facturas');
 		}
 	}
 };
 </script>
+
+<style lang="scss">
+.icon-button {
+	padding-left: 3px;
+}
+.icon-button-alone {
+	font-size: 13px !important;
+}
+</style>

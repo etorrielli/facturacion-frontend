@@ -6,8 +6,10 @@ import App from './App'
 import router from './router'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
+import ToastPlugin from 'bootstrap-vue'
 
 Vue.use(BootstrapVue)
+Vue.use(ToastPlugin)
 Vue.component('icon', Icon)
 
 /* eslint-disable no-new */
