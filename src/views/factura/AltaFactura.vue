@@ -7,53 +7,50 @@
             <b-card bg-variant="light">
               <b-form-group>
                 <b-row>
-                  <b-col>
-                    <b-form-group
-                      label-cols="3"
-                      label="Cliente:"
-                      label-align="right"
-                      label-for="comboCliente"
-                    >
-                      <b-form-select
-                        id="comboCliente"
-                        v-model="clienteSelected"
-                        @change="getSelectedItem"
-                        :options="clienteOptions"
-                      >
-                        <template slot="first">
-                          <option :value="null" disabled>-- Seleccionar una opcion --</option>
-                        </template>
-                      </b-form-select>
+                  <b-col class="pad-x">
+                    <b-form-group>
+                      <b-row>Cliente:</b-row>
+                      <b-row>
+                        <b-form-select
+                          id="comboCliente"
+                          v-model="clienteSelected"
+                          @change="getSelectedItem"
+                          :options="clienteOptions"
+                        >
+                          <template slot="first">
+                            <option :value="null" disabled>-- Seleccionar una opcion --</option>
+                          </template>
+                        </b-form-select>
+                      </b-row>
                     </b-form-group>
                   </b-col>
-                  <b-col>
-                    <b-form-group
-                      label-cols="3"
-                      label="Folio:"
-                      label-align="right"
-                      label-for="folio"
-                    >
-                      <b-form-input type="number" id="folio" min="10000" v-model="facturaDTO.folio"></b-form-input>
+                  <b-col class="pad-x">
+                    <b-form-group>
+                      <b-row>Folio:</b-row>
+                      <b-row>
+                        <b-form-input
+                          type="number"
+                          id="folio"
+                          min="10000"
+                          v-model="facturaDTO.folio"
+                        ></b-form-input>
+                      </b-row>
                     </b-form-group>
                   </b-col>
-                  <b-col>
-                    <b-form-group
-                      label-cols="3"
-                      label="Descripción:"
-                      label-align="right"
-                      label-for="descripcion"
-                    >
-                      <b-form-input id="descripcion" v-model="facturaDTO.descripcion"></b-form-input>
+                  <b-col class="pad-x">
+                    <b-form-group>
+                      <b-row>Descripción:</b-row>
+                      <b-row>
+                        <b-form-input id="descripcion" v-model="facturaDTO.descripcion"></b-form-input>
+                      </b-row>
                     </b-form-group>
                   </b-col>
-                  <b-col>
-                    <b-form-group
-                      label-cols="3"
-                      label="Observación:"
-                      label-align="right"
-                      label-for="observacion"
-                    >
-                      <b-form-input id="observacion" v-model="facturaDTO.observacion"></b-form-input>
+                  <b-col class="pad-x">
+                    <b-form-group>
+                      <b-row>Observación:</b-row>
+                      <b-row>
+                        <b-form-input id="observacion" v-model="facturaDTO.observacion"></b-form-input>
+                      </b-row>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -136,9 +133,9 @@
       <hr />
       <div>
         <router-link to="/facturas">
-          <b-button v-b-toggle.collapse-2 class="m-1">Cancelar</b-button>
+          <b-button class="m-1">Cancelar</b-button>
         </router-link>
-        <b-button v-b-toggle.collapse-2 class="m-1" variant="blue" @click="saveFactura()">Guardar</b-button>
+        <b-button class="m-1" variant="blue" @click="saveFactura()">Guardar</b-button>
       </div>
     </b-card>
   </div>
@@ -326,8 +323,7 @@ export default {
 			let mensaje = null;
 			if (this.clienteSelected === null) {
 				mensaje = 'Debe seleccionar un cliente';
-			}
-			else if (
+			} else if (
 				this.facturaDTO.detalles === undefined ||
 				this.facturaDTO.detalles === null ||
 				this.facturaDTO.detalles.length === 0
@@ -357,5 +353,9 @@ export default {
 }
 .icon-button-alone {
 	font-size: 13px !important;
+}
+.pad-x{
+	padding-left: 2%;
+	padding-right: 2%;
 }
 </style>

@@ -6,9 +6,10 @@
       </router-link>
       <br />
       <br />
-      <div>
+      <div v-if="items != null">
         <b-table responsive striped hover :items="items" :fields="fields"></b-table>
       </div>
+	  <span v-else>Cargando Facturas...</span>
     </b-card>
   </div>
 </template>
